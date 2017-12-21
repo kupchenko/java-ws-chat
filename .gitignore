@@ -4,6 +4,7 @@
 .settings
 .metadata
 .gradle
+.idea/
 /target
 */target
 /build
