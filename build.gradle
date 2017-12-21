@@ -44,9 +44,17 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.security:spring-security-messaging")
     compile("org.springframework.session:spring-session")
-    
+
     compile("com.github.kstyrc:embedded-redis:$redisVersion")
-    
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.junit.jupiter:junit-jupiter-api:${jUnit5Version}")
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+
+//    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
+//    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
+
 }

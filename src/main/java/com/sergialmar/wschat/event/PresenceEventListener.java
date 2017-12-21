@@ -1,12 +1,14 @@
 package com.sergialmar.wschat.event;
 
-import java.util.Optional;
-
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+
+import java.util.Optional;
 
 /**
  * Listener to track user presence. 
@@ -15,6 +17,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
  * 
  * @author Sergi Almar
  */
+@Log4j
 public class PresenceEventListener {
 	
 	private ParticipantRepository participantRepository;
@@ -29,17 +32,19 @@ public class PresenceEventListener {
 		this.messagingTemplate = messagingTemplate;
 		this.participantRepository = participantRepository;
 	}
-		
+
 	@EventListener
 	private void handleSessionConnected(SessionConnectEvent event) {
 		SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
 		String username = headers.getUser().getName();
 
 		LoginEvent loginEvent = new LoginEvent(username);
+		log.info("LOGIN LISTENER");
 		messagingTemplate.convertAndSend(loginDestination, loginEvent);
-		
+
 		// We store the session as we need to be idempotent in the disconnect event processing
 		participantRepository.add(headers.getSessionId(), loginEvent);
+
 	}
 	
 	@EventListener

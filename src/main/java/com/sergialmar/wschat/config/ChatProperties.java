@@ -5,7 +5,7 @@ import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "chat")
-class ChatProperties {
+public class ChatProperties {
 
 	private int maxProfanityLevel;
 	
@@ -39,7 +39,7 @@ class ChatProperties {
 	}
 
 
-	static class Destinations {
+	public static class Destinations {
 
 		private String login;
 		
