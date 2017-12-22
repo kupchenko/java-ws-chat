@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 public interface ConversationDAO extends CrudRepository<Conversation, Long> {
-    List<Conversation> findAllByParticipantsContains(String username);
+    //List<Conversation> findAllByParticipantsUsername(String username);
 }

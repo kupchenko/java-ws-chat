@@ -18,11 +18,6 @@ import java.util.Optional;
 @Log4j
 public class SAuthenticationProvider implements AuthenticationProvider {
 
-    private static final String SECURE_ADMIN_PASSWORD = "rockandroll";
-
-    @Autowired
-    private ParticipantRepository participantRepository;
-
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -34,18 +29,15 @@ public class SAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
-
-        List<GrantedAuthority> authorities = SECURE_ADMIN_PASSWORD.equals(token.getCredentials()) ?
-                AuthorityUtils.createAuthorityList("ROLE_ADMIN") : null;
-
         Optional<User> user = Optional.ofNullable(authenticationService.getUser(token.getName(), String.valueOf(token.getCredentials())));
-        log.info(user.toString() + " is trying to login");
-        log.info("User [" + token.getName() + "] pass = " + token.getCredentials());
-        boolean logged = participantRepository.isLogged(token.getName());
-        log.info("isLogged " + logged);
-        if (logged) {
+        List<GrantedAuthority> authorities;
+        if (user.isPresent()) {
+            log.info("User [" + token.getName() + "] pass = " + token.getCredentials());
+            authorities = AuthorityUtils.createAuthorityList(user.get().getRoles().toArray(new String[0]));
+            return new UsernamePasswordAuthenticationToken(token.getName(), token.getCredentials(), authorities);
+        } else {
+            log.info("No such user found! ");
             return null;
         }
-        return new UsernamePasswordAuthenticationToken(token.getName(), token.getCredentials(), authorities);
     }
 }

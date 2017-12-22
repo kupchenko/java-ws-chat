@@ -18,7 +18,9 @@ public class Message {
     private Long id;
     private String text;
 
-    //private User sender;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sender")
+    private User sender;
     private Timestamp timestamp;
 
 }

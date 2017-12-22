@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Table(name = "conversations")
 @Entity
@@ -15,21 +15,21 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = User.class)
-    @JoinTable(name = "user_has_conversations",
-            joinColumns = @JoinColumn(name = "conversation", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "participant", referencedColumnName = "id"))
-    private List<User> participants;
-    @OneToMany
-    @JoinColumn(name = "messageId")
-    private List<Message> messages;
+    //    @ManyToMany(fetch = FetchType.EAGER, targetEntity = User.class)
+//    @JoinTable(name = "user_has_conversations",
+//            joinColumns = @JoinColumn(name = "conversation", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "participant", referencedColumnName = "id"))
+//    private Set<User> participants;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Set<Message> messages;
 
     @Override
     public String toString() {
         return "Conversation{" +
                 "id=" + id +
                 ", name=" + name +
-                ", participants=" + participants.size() +
+//                ", participants=" + participants.size() +
                 ", messages=" + messages.size() +
                 '}';
     }

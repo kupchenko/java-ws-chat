@@ -1,64 +1,29 @@
 package edu.dmitrii.wschat.config;
 
-import java.util.Set;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Set;
+
+@Getter
+@Setter
 @ConfigurationProperties(prefix = "chat")
 public class ChatProperties {
 
-	private int maxProfanityLevel;
-	
-	private Set<String> disallowedWords;
-	
-	private Destinations destinations;
-	
-	
-	public int getMaxProfanityLevel() {
-		return maxProfanityLevel;
-	}
+    private int maxProfanityLevel;
 
-	public void setMaxProfanityLevel(int maxProfanityLevel) {
-		this.maxProfanityLevel = maxProfanityLevel;
-	}
-	
-	public Set<String> getDisallowedWords() {
-		return disallowedWords;
-	}
+    private Set<String> disallowedWords;
 
-	public void setDisallowedWords(Set<String> disallowedWords) {
-		this.disallowedWords = disallowedWords;
-	}
+    private Destinations destinations;
 
-	public Destinations getDestinations() {
-		return destinations;
-	}
+    @Getter
+    @Setter
+    public static class Destinations {
 
-	public void setDestinations(Destinations destinations) {
-		this.destinations = destinations;
-	}
+        private String login;
 
+        private String logout;
 
-	public static class Destinations {
-
-		private String login;
-		
-		private String logout;
-
-		public String getLogin() {
-			return login;
-		}
-
-		public void setLogin(String login) {
-			this.login = login;
-		}
-
-		public String getLogout() {
-			return logout;
-		}
-
-		public void setLogout(String logout) {
-			this.logout = logout;
-		}
-	}
+    }
 }

@@ -4,6 +4,9 @@ import edu.dmitrii.wschat.dao.UserDAO;
 import edu.dmitrii.wschat.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
 
@@ -15,6 +18,7 @@ public class AuthenticationService {
     }
 
     public User getUser(String username) {
-        return userDAO.findUserByUsername(username);
+        Optional<User> userByUsername = userDAO.findUserByUsername(username);
+        return userByUsername.orElseGet(User::new);
     }
 }

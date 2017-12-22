@@ -9,7 +9,7 @@ angular.module('springChat.controllers', ['toaster'])
 		
 		$scope.username     = '';
 		$scope.sendTo       = 'everyone';
-		$scope.participants = [];
+		$scope.conversations = [];
 		$scope.messages     = [];
 		$scope.newMessage   = ''; 
 		  
@@ -56,19 +56,19 @@ angular.module('springChat.controllers', ['toaster'])
 				  
 				$scope.username = frame.headers['user-name'];
 
-				chatSocket.subscribe("/app/chat.participants", function(message) {
-					$scope.participants = JSON.parse(message.body);
+				chatSocket.subscribe("/app/chat.conversations", function(message) {
+					$scope.conversations = JSON.parse(message.body);
 				});
 				  
 				chatSocket.subscribe("/topic/chat.login", function(message) {
-					$scope.participants.unshift({username: JSON.parse(message.body).username, typing : false});
+					$scope.conversations.unshift({username: JSON.parse(message.body).username, typing : false});
 				});
 		        	 
 				chatSocket.subscribe("/topic/chat.logout", function(message) {
 					var username = JSON.parse(message.body).username;
-					for(var index in $scope.participants) {
-						if($scope.participants[index].username == username) {
-							$scope.participants.splice(index, 1);
+					for(var index in $scope.conversations) {
+						if($scope.conversations[index].username == username) {
+							$scope.conversations.splice(index, 1);
 						}
 					}
 		        });
@@ -77,11 +77,11 @@ angular.module('springChat.controllers', ['toaster'])
 					var parsed = JSON.parse(message.body);
 					if(parsed.username == $scope.username) return;
 				  					
-					for(var index in $scope.participants) {
-						var participant = $scope.participants[index];
+					for(var index in $scope.conversations) {
+						var participant = $scope.conversations[index];
 						  
 						if(participant.username == parsed.username) {
-							$scope.participants[index].typing = parsed.typing;
+							$scope.conversations[index].typing = parsed.typing;
 						}
 				  	} 
 				});
