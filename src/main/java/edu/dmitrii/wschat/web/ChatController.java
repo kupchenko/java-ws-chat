@@ -55,13 +55,15 @@ public class ChatController {
         return message;
     }
 
-    @MessageMapping("/chat.private.{username}")
-    public void filterPrivateMessage(@Payload ChatMessage message, @DestinationVariable("username") String username, Principal principal) {
+    @MessageMapping("/chat.private")
+    public void filterPrivateMessage(@Payload ChatMessage message, Principal principal) {
         checkProfanityAndSanitize(message);
         message.setUsername(principal.getName());
 
-        conversationService.sendMessage(message);
-        simpMessagingTemplate.convertAndSend("/user/" + username + "/exchange/amq.direct/chat.message", message);
+        boolean isMessageSent = conversationService.sendMessage(message);
+        if (isMessageSent) {
+            simpMessagingTemplate.convertAndSend("/user/" + message.getConversation() + "/exchange/amq.direct/chat.message", message);
+        }
     }
 
     private void checkProfanityAndSanitize(ChatMessage message) {

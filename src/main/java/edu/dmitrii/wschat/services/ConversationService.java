@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,18 +38,25 @@ public class ConversationService {
         return Collections.emptySet();
     }
 
-    public void sendMessage(ChatMessage chatMessage) {
-        log.info("Sending message to [" + chatMessage.getConversation() + "], sender [" + chatMessage.getUsername() + "]");
-        Optional<Conversation> conversation = conversationDAO.findById(Long.valueOf(chatMessage.getConversation()));
-        if (conversation.isPresent()) {
-            Optional<User> user = userDAO.findUserByUsername(chatMessage.getUsername());
-            if (user.isPresent()) {
+    public boolean sendMessage(ChatMessage chatMessage) {
+        final Long conversationId = Long.valueOf(chatMessage.getConversation());
+        log.info("Sending message to [" + conversationId + "], sender [" + chatMessage.getUsername() + "]");
+
+        Optional<User> user = userDAO.findUserByUsername(chatMessage.getUsername());
+        if (user.isPresent()) {
+            Set<Conversation> conversations = user.get().getConversations();
+            Optional<Conversation> conversation = conversations.stream().filter(item -> Objects.equals(item.getId(), conversationId)).findAny();
+            if (conversation.isPresent()) {
                 Message message = new Message();
                 message.setText(chatMessage.getMessage());
                 message.setSender(user.get());
+                message.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                message.setConversation(conversation.get());
                 conversation.get().getMessages().add(message);
-                conversationDAO.save(conversation.get());
+                Conversation save = conversationDAO.save(conversation.get());
+                return Optional.ofNullable(save).isPresent();
             }
         }
+        return false;
     }
 }

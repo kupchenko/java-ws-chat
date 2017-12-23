@@ -1,5 +1,6 @@
 package edu.dmitrii.wschat.security;
 
+import edu.dmitrii.wschat.domain.Role;
 import edu.dmitrii.wschat.domain.User;
 import edu.dmitrii.wschat.event.ParticipantRepository;
 import edu.dmitrii.wschat.services.AuthenticationService;
@@ -14,6 +15,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @Log4j
 public class SAuthenticationProvider implements AuthenticationProvider {
@@ -33,7 +37,8 @@ public class SAuthenticationProvider implements AuthenticationProvider {
         List<GrantedAuthority> authorities;
         if (user.isPresent()) {
             log.info("User [" + token.getName() + "] pass = " + token.getCredentials());
-            authorities = AuthorityUtils.createAuthorityList(user.get().getRoles().toArray(new String[0]));
+            Set<String> collect = user.get().getRoles().stream().map(Role::getName).collect(toSet());
+            authorities = AuthorityUtils.createAuthorityList(collect.toArray(new String[0]));
             return new UsernamePasswordAuthenticationToken(token.getName(), token.getCredentials(), authorities);
         } else {
             log.info("No such user found! ");

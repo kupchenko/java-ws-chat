@@ -20,13 +20,13 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Conversation.class)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Conversation.class, cascade = CascadeType.ALL)
     @JoinTable(name = "user_has_conversations",
             joinColumns = @JoinColumn(name = "participant", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "conversation", referencedColumnName = "id"))
     private Set<Conversation> conversations;
 
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Role.class)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Role.class, cascade = CascadeType.ALL)
     @JoinTable(name = "user_has_roles",
             joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))

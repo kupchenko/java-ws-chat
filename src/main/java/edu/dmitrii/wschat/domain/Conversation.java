@@ -1,5 +1,7 @@
 package edu.dmitrii.wschat.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +22,9 @@ public class Conversation {
 //            joinColumns = @JoinColumn(name = "conversation", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "participant", referencedColumnName = "id"))
 //    private Set<User> participants;
-    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"conversation", "sender"})
     @JoinColumn(name = "id")
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<Message> messages;
 
     @Override
