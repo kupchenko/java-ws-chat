@@ -43,16 +43,17 @@ public class DBConfig {
 //        return jtManager;
 //    }
 //
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-//        emf.setDataSource(dataSource());
-//        emf.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-//        emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-//        Properties properties = new Properties();
-//        properties.setProperty(dialect, env.getProperty(dialect));
-//        emf.setJpaProperties(properties);
-//        emf.setPackagesToScan("edu.dmitrii.wschat");
-//        return emf;
-//    }
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+        emf.setDataSource(dataSource());
+        emf.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        Properties properties = new Properties();
+        properties.setProperty(dialect, env.getProperty(dialect));
+        properties.setProperty("hibernate.show_sql", "true");
+        emf.setJpaProperties(properties);
+        emf.setPackagesToScan("edu.dmitrii.wschat");
+        return emf;
+    }
 }

@@ -13,8 +13,7 @@ import java.util.Optional;
  * Listener to track user presence. 
  * Sends notifications to the login destination when a connected event is received
  * and notifications to the logout destination when a disconnect event is received
- * 
- * @author Sergi Almar
+ *
  */
 @Log4j
 public class PresenceEventListener {
@@ -38,9 +37,7 @@ public class PresenceEventListener {
 		String username = headers.getUser().getName();
 
 		LoginEvent loginEvent = new LoginEvent(username);
-		log.info("LOGIN LISTENER");
 		messagingTemplate.convertAndSend(loginDestination, loginEvent);
-
 		// We store the session as we need to be idempotent in the disconnect event processing
 		participantRepository.add(headers.getSessionId(), loginEvent);
 
@@ -48,7 +45,6 @@ public class PresenceEventListener {
 	
 	@EventListener
 	private void handleSessionDisconnect(SessionDisconnectEvent event) {
-		
 		Optional.ofNullable(participantRepository.getParticipant(event.getSessionId()))
 				.ifPresent(login -> {
 					messagingTemplate.convertAndSend(logoutDestination, new LogoutEvent(login.getUsername()));

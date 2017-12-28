@@ -5,11 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Checks for profanities and filters them
- * 
- * @author Sergi Almar
- */
 public class ProfanityChecker {
 
 	private Set<String> profanities = new HashSet<>();

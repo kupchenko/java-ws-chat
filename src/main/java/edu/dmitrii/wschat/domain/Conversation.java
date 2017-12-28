@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "last_activity")
+    private Timestamp lastActivity;
 
     @JsonIgnoreProperties({"conversations", "roles"})
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = User.class)

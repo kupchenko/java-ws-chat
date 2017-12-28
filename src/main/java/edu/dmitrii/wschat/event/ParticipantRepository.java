@@ -3,9 +3,7 @@ package edu.dmitrii.wschat.event;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author Sergi Almar
- */
+
 public class ParticipantRepository {
 
     private Map<String, LoginEvent> activeSessions = new ConcurrentHashMap<>();

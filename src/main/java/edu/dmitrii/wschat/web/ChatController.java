@@ -5,6 +5,7 @@ import edu.dmitrii.wschat.domain.Conversation;
 import edu.dmitrii.wschat.domain.SessionProfanity;
 import edu.dmitrii.wschat.exception.TooMuchProfanityException;
 import edu.dmitrii.wschat.services.ConversationService;
+import edu.dmitrii.wschat.services.MessageService;
 import edu.dmitrii.wschat.util.ProfanityChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,6 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Optional;
 
-/**
- * Controller that handles WebSocket chat messages
- *
- * @author Sergi Almar
- */
 @Slf4j
 @Controller
 public class ChatController {
@@ -41,6 +37,8 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
+    @Autowired
+    private MessageService messageService;
 
     @SubscribeMapping("/chat.conversations")
     public Collection<Conversation> retrieveParticipants(Principal principal) {
@@ -60,7 +58,7 @@ public class ChatController {
         checkProfanityAndSanitize(message);
         message.setUsername(principal.getName());
 
-        Conversation conversation = conversationService.sendMessage(message);
+        Conversation conversation = messageService.sendMessage(message);
         log.info("Message sent " + (Optional.ofNullable(conversation).isPresent() ? "successfully" : "failed"));
         conversation.getParticipants().stream().filter(user -> !user.getUsername().equals(principal.getName())).forEach(user -> {
             simpMessagingTemplate.convertAndSend("/user/" + user.getUsername() + "/exchange/amq.direct/chat.message", message);

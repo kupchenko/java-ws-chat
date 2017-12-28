@@ -22,11 +22,11 @@ public class Message {
     private String text;
     @JsonIgnoreProperties({"conversations", "roles"})
     @JoinColumn(name = "sender")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
     private User sender;
     @JsonIgnoreProperties({"participants", "messages"})
     @JoinColumn(name = "conversation")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Conversation.class)
     private Conversation conversation;
     private Timestamp timestamp;
 
