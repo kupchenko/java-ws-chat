@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('springChat.controllers', ['toaster'])
-    .controller('ChatController', ['$scope', '$location', '$interval', 'toaster', 'ChatSocket', function ($scope, $location, $interval, toaster, chatSocket) {
+    .controller('ChatController', ['$scope', '$location', '$interval', 'toaster', 'ChatSocket', '$http', function ($scope, $location, $interval, toaster, chatSocket, $http) {
 
         var typing = undefined;
 
@@ -62,11 +62,23 @@ angular.module('springChat.controllers', ['toaster'])
         };
 
         $scope.privateSending = function (id, username) {
+            $scope.sendToConversationId = (id != $scope.sendToConversationId) ? id : '-1';
+            $scope.messages = [];
             if (username != $scope.sendTo) {
-                $scope.messages = []
+                $http({method: 'GET', url: '/conversation/messages/' + $scope.sendToConversationId})
+                    .then(function success(response) {
+                        // console.log("---------------------------------");
+                        // console.log(response.data);
+                        // console.log("---------------------------------");
+                        for (var index in response.data) {
+                            var item = response.data[index];
+                            $scope.messages.unshift(item);
+                            //toaster.pop('success', "Message", item.message)
+                        }
+                    });
             }
             $scope.sendTo = (username != $scope.sendTo) ? username : 'nobody';
-            $scope.sendToConversationId = (id != $scope.sendToConversationId) ? id : '-1';
+
         };
 
         var initStompClient = function () {

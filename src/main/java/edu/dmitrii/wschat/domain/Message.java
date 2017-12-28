@@ -1,6 +1,7 @@
 package edu.dmitrii.wschat.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,18 +14,19 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
     @JsonIgnoreProperties({"conversations", "roles"})
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender")
+    @ManyToOne(fetch = FetchType.EAGER)
     private User sender;
     @JsonIgnoreProperties({"participants", "messages"})
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "conversation")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Conversation conversation;
     private Timestamp timestamp;
 

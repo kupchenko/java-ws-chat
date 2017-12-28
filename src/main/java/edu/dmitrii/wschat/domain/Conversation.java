@@ -3,8 +3,10 @@ package edu.dmitrii.wschat.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "conversations")
@@ -24,7 +26,7 @@ public class Conversation {
             inverseJoinColumns = @JoinColumn(name = "participant", referencedColumnName = "id"))
     private Set<User> participants;
 
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "sender")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Message> messages;
 
@@ -33,7 +35,7 @@ public class Conversation {
         return "Conversation{" +
                 "id=" + id +
                 ", name=" + name +
-//                ", participants=" + participants.size() +
+                ", participants=" + participants.size() +
                 ", messages=" + messages.size() +
                 '}';
     }

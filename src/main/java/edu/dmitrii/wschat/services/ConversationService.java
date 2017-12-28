@@ -65,4 +65,9 @@ public class ConversationService {
         }
         return null;
     }
+
+    public Optional<Conversation> getConversation(String conversationStr) {
+        Long conversationId = Long.valueOf(conversationStr);
+        return conversationDAO.findById(conversationId);
+    }
 }
