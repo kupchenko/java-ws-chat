@@ -76,21 +76,23 @@ angular.module('springChat.controllers', ['toaster'])
 
                 $scope.username = frame.headers['user-name'];
 
-                // chatSocket.subscribe("/app/chat.conversations", function (message) {
-                //     $scope.conversations = JSON.parse(message.body);
-                // });
+                chatSocket.subscribe("/app/chat.conversations", function (message) {
+                    $scope.conversations = JSON.parse(message.body);
+                });
 
                 chatSocket.subscribe("/topic/chat.login", function (message) {
-                    $scope.conversations.unshift({username: JSON.parse(message.body).username, typing: false});
+                    //$scope.conversations.unshift({username: JSON.parse(message.body).username, typing: false});
+                    toaster.pop('success', "Notification", "User " + JSON.parse(message.body).username + " has logged in")
                 });
 
                 chatSocket.subscribe("/topic/chat.logout", function (message) {
                     var username = JSON.parse(message.body).username;
-                    for (var index in $scope.conversations) {
-                        if ($scope.conversations[index].name == username) {
-                            $scope.conversations.splice(index, 1);
-                        }
-                    }
+                    toaster.pop('warning', "Notification", "User " + username + " has logged out")
+                    // for (var index in $scope.conversations) {
+                    //     if ($scope.conversations[index].name == username) {
+                    //         $scope.conversations.splice(index, 1);
+                    //     }
+                    // }
                 });
 
                 chatSocket.subscribe("/topic/chat.typing", function (message) {
@@ -112,9 +114,9 @@ angular.module('springChat.controllers', ['toaster'])
 
                 chatSocket.subscribe("/user/exchange/amq.direct/chat.message", function (message) {
                     var parsed = JSON.parse(message.body);
+                    parsed.priv = true;
+                    $scope.messages.unshift(parsed);
                     if (parsed.conversation === $scope.sendToConversationId) {
-                        parsed.priv = true;
-                        $scope.messages.unshift(parsed);
                     }
                     toaster.pop('error', "Message", "You have a new message from " + parsed.username)
                 });

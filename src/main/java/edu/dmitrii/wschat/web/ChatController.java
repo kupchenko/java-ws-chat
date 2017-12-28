@@ -8,7 +8,6 @@ import edu.dmitrii.wschat.services.ConversationService;
 import edu.dmitrii.wschat.util.ProfanityChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Controller that handles WebSocket chat messages
@@ -60,10 +60,9 @@ public class ChatController {
         checkProfanityAndSanitize(message);
         message.setUsername(principal.getName());
 
-        boolean isMessageSent = conversationService.sendMessage(message);
-        if (isMessageSent) {
-            simpMessagingTemplate.convertAndSend("/user/" + message.getConversation() + "/exchange/amq.direct/chat.message", message);
-        }
+        Conversation conversation = conversationService.sendMessage(message);
+        log.info("Message sent " + (Optional.ofNullable(conversation).isPresent() ? "successfully" : "failed"));
+        simpMessagingTemplate.convertAndSend("/user/" + conversation.getName() + "/exchange/amq.direct/chat.message", message);
     }
 
     private void checkProfanityAndSanitize(ChatMessage message) {

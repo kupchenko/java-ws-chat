@@ -1,6 +1,7 @@
 package edu.dmitrii.wschat.services;
 
 import edu.dmitrii.wschat.dao.ConversationDAO;
+import edu.dmitrii.wschat.dao.MessageDAO;
 import edu.dmitrii.wschat.dao.UserDAO;
 import edu.dmitrii.wschat.domain.ChatMessage;
 import edu.dmitrii.wschat.domain.Conversation;
@@ -25,6 +26,9 @@ public class ConversationService {
     private ConversationDAO conversationDAO;
 
     @Autowired
+    private MessageDAO messageDAO;
+
+    @Autowired
     private UserDAO userDAO;
 
     public Set<Conversation> getConversations(String username) {
@@ -38,25 +42,27 @@ public class ConversationService {
         return Collections.emptySet();
     }
 
-    public boolean sendMessage(ChatMessage chatMessage) {
+    public Conversation sendMessage(ChatMessage chatMessage) {
         final Long conversationId = Long.valueOf(chatMessage.getConversation());
         log.info("Sending message to [" + conversationId + "], sender [" + chatMessage.getUsername() + "]");
 
         Optional<User> user = userDAO.findUserByUsername(chatMessage.getUsername());
         if (user.isPresent()) {
             Set<Conversation> conversations = user.get().getConversations();
-            Optional<Conversation> conversation = conversations.stream().filter(item -> Objects.equals(item.getId(), conversationId)).findAny();
-            if (conversation.isPresent()) {
+            Optional<Conversation> conversationOptional = conversations.stream().filter(item -> Objects.equals(item.getId(), conversationId)).findAny();
+            if (conversationOptional.isPresent()) {
+                Conversation conversation = conversationOptional.get();
                 Message message = new Message();
                 message.setText(chatMessage.getMessage());
                 message.setSender(user.get());
                 message.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                message.setConversation(conversation.get());
-                conversation.get().getMessages().add(message);
-                Conversation save = conversationDAO.save(conversation.get());
-                return Optional.ofNullable(save).isPresent();
+                message.setConversation(conversation);
+                Message save = messageDAO.save(message);
+                //conversation.getMessages().add(message);
+                //Conversation savedCon = conversationDAO.save(conversation);
+                return Optional.ofNullable(save).isPresent() ? conversation : null;
             }
         }
-        return false;
+        return null;
     }
 }
