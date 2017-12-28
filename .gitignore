@@ -4,9 +4,12 @@
 .settings
 .metadata
 .gradle
+.idea/
 /target
 */target
 /build
 */build
 /bin
 */bin
+gradle
+gradlew

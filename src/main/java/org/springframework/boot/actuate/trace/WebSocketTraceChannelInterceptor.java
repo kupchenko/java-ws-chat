@@ -15,7 +15,6 @@ import org.springframework.messaging.support.NativeMessageHeaderAccessor;
 /**
  * {@link ChannelInterceptor} that logs messages to a {@link TraceRepository}.
  *
- * @author Sergi Almar
  */
 public class WebSocketTraceChannelInterceptor extends ChannelInterceptorAdapter {
 
@@ -61,7 +60,7 @@ public class WebSocketTraceChannelInterceptor extends ChannelInterceptorAdapter 
 		Map<String, Object> traceHeaders = new LinkedHashMap<String, Object>();
 		
 		for(String header : nativeHeaders.keySet()) {
-			List<String> headerValue = (List<String>) nativeHeaders.get(header);
+			List<String> headerValue = nativeHeaders.get(header);
 			Object value = headerValue;
 				
 			if(headerValue.size() == 1) {
