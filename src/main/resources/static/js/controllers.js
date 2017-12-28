@@ -114,11 +114,11 @@ angular.module('springChat.controllers', ['toaster'])
 
                 chatSocket.subscribe("/user/exchange/amq.direct/chat.message", function (message) {
                     var parsed = JSON.parse(message.body);
-                    parsed.priv = true;
-                    $scope.messages.unshift(parsed);
-                    if (parsed.conversation === $scope.sendToConversationId) {
+                    if (parsed.conversation == $scope.sendToConversationId) {
+                        parsed.priv = true;
+                        $scope.messages.unshift(parsed);
                     }
-                    toaster.pop('error', "Message", "You have a new message from " + parsed.username)
+                    toaster.pop('success', "Message", "You have a new message from " + parsed.username + " in conversation " + parsed.conversation)
                 });
 
                 chatSocket.subscribe("/user/exchange/amq.direct/errors", function (message) {

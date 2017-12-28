@@ -62,7 +62,9 @@ public class ChatController {
 
         Conversation conversation = conversationService.sendMessage(message);
         log.info("Message sent " + (Optional.ofNullable(conversation).isPresent() ? "successfully" : "failed"));
-        simpMessagingTemplate.convertAndSend("/user/" + conversation.getName() + "/exchange/amq.direct/chat.message", message);
+        conversation.getParticipants().stream().filter(user -> !user.getUsername().equals(principal.getName())).forEach(user -> {
+            simpMessagingTemplate.convertAndSend("/user/" + user.getUsername() + "/exchange/amq.direct/chat.message", message);
+        });
     }
 
     private void checkProfanityAndSanitize(ChatMessage message) {
