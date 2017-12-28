@@ -24,7 +24,7 @@ angular.module('springChat.controllers', ['toaster'])
         $scope.sendMessage = function () {
             var destination = "/app/chat.message";
 
-            if ($scope.sendTo != "nobody") {
+            if ($scope.sendTo != "nobody" && $scope.newMessage.trim() != "") {
                 destination = "/app/chat.private";
                 $scope.messages.unshift({
                     message: $scope.newMessage,
