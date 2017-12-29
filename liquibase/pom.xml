@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>edu.dmitriy</groupId>
+    <artifactId>liquibase</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>liquibase</name>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <liquibase.version>3.5.1</liquibase.version>
+        <liquibase-groovy-dsl.version>1.2.1</liquibase-groovy-dsl.version>
+        <driver></driver>
+        <url></url>
+        <username></username>
+        <password></password>
+        <changeLogFile></changeLogFile>
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-groovy-dsl</artifactId>
+                        <version>${liquibase-groovy-dsl.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>${driver}</driver>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                    <url>${url}</url>
+                    <changeLogFile>${changeLogFile}</changeLogFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

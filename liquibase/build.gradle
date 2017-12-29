@@ -1,0 +1,34 @@
+apply plugin: 'liquibase'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://mvnrepository.com/artifact"
+        }
+    }
+    dependencies {
+        classpath 'mysql:mysql-connector-java:5.1.37'
+        classpath 'org.liquibase:liquibase-gradle-plugin:1.2.0'
+        classpath 'com.h2database:h2:1.3.160'
+    }
+}
+
+liquibase {
+    activities {
+        first {
+            changeLogFile '/migrations/changelog-master.groovy'
+            url 'jdbc:mysql://localhost:3306/chat'
+            username 'root'
+            password 'root'
+        }
+        second {
+            changeLogFile '/migrations/changelog-apply-data.groovy'
+            url 'jdbc:mysql://localhost:3306/chat'
+            username 'root'
+            password 'root'
+        }
+    }
+    runList = 'first, second'
+}
