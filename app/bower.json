@@ -1,7 +1,7 @@
 {
   "name": "Spring WebSocket Chat",
   "version": "0.1.2",
-  "authors": ["Sergi Almar <sergi.almar@gmail.com>"],
+  "authors": ["Dmitrii Kupchenko<kupchenko.dmitrii@gmail.com>"],
   "dependencies": {
 	"jquery": "2.1.4",
     "angular": "1.4.1",
