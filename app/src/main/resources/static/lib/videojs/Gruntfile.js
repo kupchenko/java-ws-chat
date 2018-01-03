@@ -66,7 +66,7 @@ module.exports = function(grunt) {
     },
     dist: {},
     qunit: {
-      source: ['test/index.html'],
+      source: ['test/signin.html'],
       minified: ['test/minified.html'],
       minified_api: ['test/minified-api.html']
     },
