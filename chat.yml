@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: chat
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: chat
+  template:
+    metadata:
+      labels:
+        tier: chat
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: web
+        image: dimonum/chat:1.1
