@@ -18,7 +18,16 @@ spec:
       containers:
       - name: db
         image: dimonum/chat-db:1.0
+        ports:
+            - containerPort: 3306
+        volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
         env:
             - name: MYSQL_ROOT_PASSWORD
               value: chat-db-pass
+      volumes:
+              - name: mysql-data
+                hostPath:
+                  path: /var/lib/mysql
 
