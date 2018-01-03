@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: chat-db
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: chat-db
+  template:
+    metadata:
+      labels:
+        tier: chat-db
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: db
+        image: dimonum/chat-db:1.0
+        env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: chat-db-pass
+
