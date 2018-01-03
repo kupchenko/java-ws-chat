@@ -5,6 +5,7 @@
 .metadata
 .gradle
 .idea/
+*.iml
 /target
 */target
 /build

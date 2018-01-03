@@ -51,7 +51,7 @@ public class DBConfig {
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         Properties properties = new Properties();
         properties.setProperty(dialect, env.getProperty(dialect));
-        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.show_sql", "false");
         emf.setJpaProperties(properties);
         emf.setPackagesToScan("edu.dmitrii.wschat");
         return emf;
