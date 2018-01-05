@@ -1,6 +1,8 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    name: chat-db
   name: chat-db
   namespace: default
 spec:
@@ -20,14 +22,27 @@ spec:
         image: dimonum/chat-db:1.0
         ports:
             - containerPort: 3306
-        volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
+#        volumeMounts:
+#            - name: mysql-data
+#              mountPath: /var/lib/mysql
         env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: chat-db-secret
+                  key: db.user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chat-db-secret
+                  key: db.password
             - name: MYSQL_ROOT_PASSWORD
-              value: chat-db-pass
-      volumes:
-              - name: mysql-data
-                hostPath:
-                  path: /var/lib/mysql
+              valueFrom:
+                secretKeyRef:
+                  name: chat-db-secret
+                  key: db.root.password
+#      volumes:
+#              - name: mysql-data
+#                hostPath:
+#                  path: /var/lib/mysql
 
