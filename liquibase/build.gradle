@@ -19,15 +19,15 @@ liquibase {
     activities {
         first {
             changeLogFile '/migrations/changelog-master.groovy'
-            url 'jdbc:mysql://localhost:3306/chat'
+            url 'jdbc:mysql://chat-db-service/chat'
             username 'root'
-            password 'root'
+            password 'pass'
         }
         second {
             changeLogFile '/migrations/changelog-apply-data.groovy'
-            url 'jdbc:mysql://localhost:3306/chat'
+            url 'jdbc:mysql://chat-db-service/chat'
             username 'root'
-            password 'root'
+            password 'pass'
         }
     }
     runList = 'first, second'
