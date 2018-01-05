@@ -16,7 +16,7 @@ spec:
         tier: chat-db
     spec:
       imagePullSecrets:
-        - name: regsecret
+        - name: docker-registry-secret
       containers:
       - name: db
         image: dimonum/chat-db:1.1
@@ -26,23 +26,23 @@ spec:
 #            - name: mysql-data
 #              mountPath: /var/lib/mysql
         env:
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: chat-db-secret
-                  key: db.user
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: chat-db-secret
-                  key: db.password
-            - name: MYSQL_DATABASE
-              value: chat
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: chat-db-secret
-                  key: db.root.password
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.password
+          - name: MYSQL_DATABASE
+            value: chat
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.root.password
 #      volumes:
 #              - name: mysql-data
 #                hostPath:

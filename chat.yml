@@ -14,7 +14,20 @@ spec:
         tier: chat
     spec:
       imagePullSecrets:
-        - name: regsecret
+        - name: docker-registry-secret
       containers:
       - name: web
-        image: dimonum/chat:1.1
+        image: dimonum/chat:1.0-app
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.user
+          - name: DB_USER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.password
+          - name: DB_ADDRESS
+            value: chat-db-service
