@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chat-db-liquibase
+spec:
+  template:
+    metadata:
+      name: chat-db-liquibase
+    spec:
+      imagePullSecrets:
+          - name: docker-registry-secret
+      containers:
+      - name: chat-db-liquibase
+        image: dimonum/chat:1.4-liquibase-maven
+        env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chat-db-secret
+                key: db.password
+        command: ["mvn", "liquibase:update"]
+        args: ["-Durl=jdbc:mysql://chat-db-service/chat", "-Ddriver=com.mysql.jdbc.Driver", "-Dusername=$(MYSQL_USER)", "-Dpassword=$(MYSQL_PASSWORD)", "-DchangeLogFile=migrations/changelog-master.groovy"]
+      restartPolicy: Never
