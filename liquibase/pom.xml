@@ -54,6 +54,7 @@
                     <password>${password}</password>
                     <url>${url}</url>
                     <changeLogFile>${changeLogFile}</changeLogFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
             </plugin>
         </plugins>
