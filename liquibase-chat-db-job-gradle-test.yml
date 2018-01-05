@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chat-db-liquibase-time-out
+spec:
+  template:
+    metadata:
+      name: chat-db-liquibase
+    spec:
+      imagePullSecrets:
+          - name: docker-registry-secret
+      containers:
+      - name: chat-db-liquibase
+        image: dimonum/chat:1.1-liquibase
+        command: ["gradle", "update"]
+      restartPolicy: Never
