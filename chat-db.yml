@@ -19,7 +19,7 @@ spec:
         - name: regsecret
       containers:
       - name: db
-        image: dimonum/chat-db:1.0
+        image: dimonum/chat-db:1.1
         ports:
             - containerPort: 3306
 #        volumeMounts:
@@ -36,6 +36,8 @@ spec:
                 secretKeyRef:
                   name: chat-db-secret
                   key: db.password
+            - name: MYSQL_DATABASE
+              value: chat
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
